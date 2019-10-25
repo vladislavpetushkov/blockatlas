@@ -68,11 +68,11 @@ func addCall(storage *storage.Storage) func(c *gin.Context) {
 		}
 
 		subs := parseSubscriptions(req.Subscriptions, req.Webhook)
-		xpubSubs := parseSubscriptions(req.XpubSubscriptions, req.Webhook)
-		subs = append(subs, xpubSubs...)
-
 		go storage.AddSubscriptions(subs)
-		go cacheXpub(req.XpubSubscriptions, storage)
+
+		xpubSubs := parseXpubSubscriptions(req.XpubSubscriptions, req.Webhook)
+		go storage.AddSubscriptions(xpubSubs)
+
 		RenderSuccess(c, ObserverResponse{Status: "Added"})
 	}
 }
@@ -142,18 +142,6 @@ func statusCall(storage *storage.Storage) func(c *gin.Context) {
 			result[coin.Handle] = status
 		}
 		RenderSuccess(c, result)
-	}
-}
-
-func cacheXpub(subscriptions map[string][]string, storage *storage.Storage) {
-	for coinStr, perCoin := range subscriptions {
-		coin, err := strconv.Atoi(coinStr)
-		if err != nil {
-			continue
-		}
-		for _, xpub := range perCoin {
-			go storage.CacheXPubAddress(xpub, uint(coin))
-		}
 	}
 }
 
