@@ -13,7 +13,8 @@ type Client struct {
 
 // GetCurrentBlockInfo get request function which returns current  blockchain status model
 func (c *Client) GetCurrentBlockInfo() (cbi *CurrentBlockInfo, err error) {
-	err = c.Get(&cbi, "clientInit", nil)
+	path := fmt.Sprintf("blocks/best")
+	err = c.Get(&cbi, path, nil)
 
 	return cbi, err
 }

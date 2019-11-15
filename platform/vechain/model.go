@@ -64,7 +64,7 @@ type TokenTransfer struct {
 
 // CurrentBlockInfo type is a model with current blockchain height
 type CurrentBlockInfo struct {
-	BestBlockNum int64 `json:"bestBlockNum"`
+	BestBlockNum int64 `json:"number"`
 }
 
 // Block type is a VeChain block model
