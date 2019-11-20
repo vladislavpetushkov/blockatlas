@@ -4,12 +4,49 @@ import (
 	"github.com/trustwallet/blockatlas/pkg/blockatlas"
 )
 
-type TransferTx struct {
-	Transactions []Tx `json:"transactions"`
+//type TransferTx struct {
+//	Transactions []Tx `json:"transactions"`
+//}
+//
+//type Tx struct {
+//	ID string `json:"id"`
+//}
+
+type TransferTxRequest struct {
+	Range       Range   `json:"range"`
+	Options     Options `json:"options"`
+	CriteriaSet []SetCriteria  `json:"criteriaSet"`
+	Order       string  `json:"order"`
 }
 
-type Tx struct {
-	ID string `json:"id"`
+type Range struct {
+	Unit string `json:"unit"`
+	From uint64 `json:"from"`
+	To   uint64 `json:"to"`
+}
+
+type Options struct {
+	Offset uint64 `json:"offset"`
+	Limit  uint64 `json:"limit"`
+}
+
+type SetCriteria struct {
+	Sender    string `json:"sender"`
+	Recipient string `json:"recipient"`
+}
+
+type TransferTxResponse struct {
+	Base Transfer
+	Meta MetaReponse
+}
+
+type MetaReponse struct {
+	BlockID        string `json:"blockID"`
+	BlockNumber    uint64 `json:"blockNumber"`
+	BlockTimestamp uint64 `json:"blockTimestamp"`
+	TxID           string `json:"txID"`
+	TxOrigin       string `json:"txOrigin"`
+	ClauseIndex    uint64 `json:"clauseIndex"`
 }
 
 type TransferReceipt struct {

@@ -180,8 +180,8 @@ func (p *Platform) getTxsByAddress(address string) ([]blockatlas.Tx, error) {
 	sourceTxs, _ := p.client.GetTransactions(address)
 
 	var ids []string
-	for _, tx := range sourceTxs.Transactions {
-		ids = append(ids, tx.ID)
+	for _, tx := range sourceTxs {
+		ids = append(ids, tx.Meta.TxID)
 	}
 	receiptsChan := p.getTransactionReceipt(ids)
 

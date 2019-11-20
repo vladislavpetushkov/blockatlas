@@ -28,13 +28,15 @@ func (c *Client) GetBlockByNumber(num int64) (block *Block, err error) {
 }
 
 // GetTransactions get request function which returns a VET transfer transactions for given address
-func (c *Client) GetTransactions(address string) (TransferTx, error) {
-	var transfers TransferTx
-	err := c.Get(&transfers, "transactions", url.Values{
-		"address": {address},
-		"count":   {"25"},
-		"offset":  {"0"},
-	})
+func (c *Client) GetTransactions(address string) ([]TransferTxResponse, error) {
+	var transfers TransferTxResponse
+	body := TransferTxRequest{
+		Range:   Range{"block", 0, 900000},
+		Options: Options{0, 10},
+		CriteriaSet: []SetCriteria{{Sender: address, Recipient: address}},
+	}
+
+	err := c.Post(&transfers, body)
 	return transfers, err
 }
 
