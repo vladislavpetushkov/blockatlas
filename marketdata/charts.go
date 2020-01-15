@@ -9,6 +9,10 @@ import (
 	"github.com/trustwallet/blockatlas/pkg/errors"
 )
 
+const (
+	minUnixData = 1000000000
+)
+
 type Charts struct {
 	chartProviders chart.Providers
 }
@@ -28,6 +32,9 @@ func InitCharts() *Charts {
 
 func (c *Charts) GetChartData(coin uint, token string, currency string, timeStart int64) (blockatlas.ChartData, error) {
 	chartsData := blockatlas.ChartData{}
+	if timeStart < minUnixData {
+		timeStart = minUnixData
+	}
 	for _, c := range c.chartProviders {
 		charts, err := c.GetChartData(coin, token, currency, timeStart)
 		if err != nil {
